@@ -1,56 +1,48 @@
 # PMS — Project Management System
 
-نظام متكامل لإدارة المشاريع والمهام وأعضاء الفريق، مبني باستخدام **PHP + MySQL** ومهيأ للعمل مباشرة على **XAMPP**، مع بنية داخلية منظمة وقابلة للتوسع، ونظام صلاحيات تفصيلي، وإشعارات داخلية، وتقارير وتحليلات، وتجهيزات أولية للنشر في بيئة الإنتاج.
+A PHP/MySQL project management system designed for local XAMPP deployment, with project and task management, team roles, granular permissions, internal notifications, reporting, attachments, activity logging, and database backup support.
 
----
+## Table of Contents
 
-## 📌 نبذة عن المشروع
+* [Quick Start](#quick-start)
+* [Project Overview](#project-overview)
+* [Key Features](#key-features)
+* [Tech Stack](#tech-stack)
+* [Requirements](#requirements)
+* [Installation](#installation)
+* [Database Setup](#database-setup)
+* [Environment Configuration](#environment-configuration)
+* [First-Time Setup](#first-time-setup)
+* [Existing Installation Upgrade](#existing-installation-upgrade)
+* [Login](#login)
+* [Project Structure](#project-structure)
+* [Architecture](#architecture)
+* [Feature Breakdown](#feature-breakdown)
+* [Roles and Permissions](#roles-and-permissions)
+* [Notifications](#notifications)
+* [Reports and Analytics](#reports-and-analytics)
+* [Development Milestones](#development-milestones)
+* [Production Readiness](#production-readiness)
+* [Database Backup](#database-backup)
+* [Security Notes](#security-notes)
+* [Project Status](#project-status)
+* [Future Enhancements](#future-enhancements)
+* [Operational Notes](#operational-notes)
+* [License](#license)
 
-**PMS (Project Management System)** هو نظام لإدارة المشاريع والمهام يساعد الفرق على تنظيم العمل، متابعة التقدم، إدارة أعضاء الفريق، مراقبة الأداء، وإدارة المرفقات والتبعيات والإشعارات من خلال واجهة موحدة.
+## Quick Start
 
-تم تطوير النظام على مراحل متتابعة، بدايةً من الوظائف الأساسية، وصولًا إلى إعادة الهيكلة باستخدام **Repository Pattern**، ونظام الصلاحيات التفصيلية، والإشعارات الداخلية، ومتطلبات الجاهزية للإنتاج.
+For a new local installation:
 
-### أبرز المزايا
-
-* 🔐 مصادقة وتسجيل دخول آمن.
-* 👥 إدارة المستخدمين وأعضاء الفريق.
-* 📁 إدارة المشاريع والمهام.
-* ✅ إدارة المهام والتبعيات والتعليقات.
-* 📎 رفع وتنزيل المرفقات بشكل آمن.
-* 🗑️ دعم **Soft Delete**.
-* 👤 صفحة **My Tasks**.
-* 📊 تقارير وتحليلات متقدمة.
-* 📈 مخططات **Gantt** و **Burndown**.
-* 📤 تصدير تقارير الأداء بصيغة CSV.
-* 🔑 نظام صلاحيات تفصيلي وقابل للتخصيص.
-* 🔔 نظام إشعارات داخلية.
-* 🧱 بنية **Repository Pattern** لعزل استعلامات قاعدة البيانات.
-* 🌍 دعم `.env` لبيئات التطوير والإنتاج.
-* 🛡️ تحسينات أمنية للجلسات والملفات والسجلات.
-* 💾 نسخ احتياطية تلقائية لقاعدة البيانات.
-
----
-
-# 🛠️ المتطلبات
-
-قبل تشغيل المشروع، تأكد من توفر:
-
-* **XAMPP**
-* **PHP**
-* **MySQL / MariaDB**
-* **Apache**
-* **phpMyAdmin**
-* متصفح حديث
-
-> لا يحتاج المشروع في وضعه الحالي إلى **Composer** أو مكتبات PHP خارجية.
-
----
-
-# 🚀 التثبيت والتشغيل على XAMPP
-
-## 1. نسخ المشروع
-
-انسخ مجلد `pms` بالكامل إلى مجلد `htdocs` الخاص بـ XAMPP.
+```text
+Copy project
+→ Start Apache + MySQL
+→ Import database/schema.sql
+→ Run database migrations in order
+→ Open install.php
+→ Create Administrator account
+→ Login
+```
 
 ### Windows
 
@@ -64,369 +56,456 @@ C:\xampp\htdocs\pms
 /Applications/XAMPP/htdocs/pms
 ```
 
+Then start **Apache** and **MySQL** from the XAMPP Control Panel.
+
 ---
 
-## 2. تشغيل Apache وMySQL
+## Project Overview
 
-افتح **XAMPP Control Panel** ثم شغّل:
+**PMS — Project Management System** is a PHP/MySQL application intended for managing projects, tasks, teams, permissions, attachments, activities, notifications, and project-related reporting.
+
+The system uses a modular PHP structure with a **Repository Pattern** to isolate database access from request-handling logic.
+
+The application is designed primarily for local operation with **XAMPP** and can be prepared for deployment to a real hosting environment through environment-based configuration and security hardening.
+
+---
+
+## Key Features
+
+| Area               | Features                                                      |
+| ------------------ | ------------------------------------------------------------- |
+| Authentication     | Login and Administrator account setup                         |
+| User Roles         | `admin`, `manager`, `member`                                  |
+| Project Management | Project CRUD and project-related workflows                    |
+| Task Management    | Task CRUD, assignments, dependencies, `actual_hours`          |
+| Team Management    | Team/user management                                          |
+| Dashboard          | Project and task overview                                     |
+| Activity Logging   | Application activity tracking                                 |
+| Attachments        | File uploads with extension and size restrictions             |
+| Soft Delete        | Non-destructive deletion behavior where implemented           |
+| Permissions        | Granular role-based permissions                               |
+| Notifications      | Internal notifications and unread counter                     |
+| Reports            | Gantt, Burndown, Team Performance                             |
+| Export             | CSV export                                                    |
+| Backup             | `mysqldump` + `gzip`, with retention of the latest 14 backups |
+
+---
+
+## Tech Stack
+
+| Technology              | Purpose                         |
+| ----------------------- | ------------------------------- |
+| PHP                     | Application runtime             |
+| MySQL / MariaDB         | Database                        |
+| Apache                  | Web server                      |
+| XAMPP                   | Local development environment   |
+| HTML / CSS / JavaScript | Application interface           |
+| PDO                     | Database access                 |
+| Repository Pattern      | Database access isolation       |
+| `.env`                  | Environment configuration       |
+| `.htaccess`             | Access and execution protection |
+| Bash                    | Backup scripting                |
+| `mysqldump`             | Database backup                 |
+| `gzip`                  | Backup compression              |
+
+The project does not require Composer-based external libraries for the currently implemented CSV export and internal notification functionality.
+
+---
+
+## Requirements
+
+Before installation, ensure the following are available:
+
+* XAMPP with Apache and MySQL/MariaDB.
+* PHP provided by the XAMPP installation.
+* A web browser.
+* Access to `phpMyAdmin`.
+* Bash support for executing `scripts/backup.sh` when database backups are required.
+
+---
+
+## Installation
+
+### 1. Copy the Project
+
+Place the complete `pms` directory inside the XAMPP web root.
+
+**Windows:**
 
 ```text
-Apache
-MySQL
+C:\xampp\htdocs\pms
 ```
 
-تأكد من أن الخدمتين تعملان بنجاح قبل الانتقال إلى الخطوة التالية.
+**macOS:**
 
----
+```text
+/Applications/XAMPP/htdocs/pms
+```
 
-## 3. إنشاء قاعدة البيانات
+### 2. Start XAMPP Services
 
-افتح **phpMyAdmin** من خلال:
+Start:
+
+* Apache
+* MySQL
+
+from the XAMPP Control Panel.
+
+### 3. Open phpMyAdmin
+
+Open:
 
 ```text
 http://localhost/phpmyadmin
 ```
 
-ثم:
+### 4. Import the Database Schema
 
-1. افتح تبويب **SQL**.
-2. افتح الملف:
+Execute:
 
 ```text
 database/schema.sql
 ```
 
-3. انسخ محتواه إلى محرر SQL.
-4. نفّذ الاستعلامات.
-
-سيؤدي ذلك إلى إنشاء قاعدة البيانات:
+This creates:
 
 ```text
 pms_db
 ```
 
-بالإضافة إلى جميع الجداول الأساسية للنظام.
+### 5. Run the Initial Migrations
 
----
-
-## 4. تشغيل Database Migrations
-
-بعد تنفيذ `schema.sql`، يجب تنفيذ ملفات الـ **Migrations** بالترتيب.
-
-نفّذ:
+For a **first installation only**, execute the migrations in this exact order:
 
 ```text
 database/migrations/001_permissions.sql
 database/migrations/002_notifications.sql
 ```
 
-### وظيفة كل Migration
+Migration order matters because the database changes are incremental.
 
-| الملف                   | الوظيفة                        |
-| ----------------------- | ------------------------------ |
-| `001_permissions.sql`   | إضافة نظام الصلاحيات التفصيلية |
-| `002_notifications.sql` | إضافة نظام الإشعارات الداخلية  |
+### 6. Configure the Environment
 
-### عند تحديث نسخة موجودة
-
-إذا كانت لديك نسخة سابقة من النظام سبق تنفيذ `schema.sql` عليها، **لا تقم بإعادة تنفيذ `schema.sql`**.
-
-نفّذ فقط ملفات الـ Migrations الجديدة المطلوبة، مثل:
+For an actual deployment environment, copy:
 
 ```text
-001_permissions.sql
-002_notifications.sql
+.env.example
 ```
 
-وذلك للحفاظ على البيانات الحالية.
+to:
+
+```text
+.env
+```
+
+Then adjust the configuration values inside `.env`.
+
+### 7. Run the Installer
+
+Open:
+
+```text
+http://localhost/pms/install.php
+```
+
+Create the initial Administrator account.
+
+### 8. Login
+
+Open:
+
+```text
+http://localhost/pms/modules/auth/login.php
+```
+
+There is **no default account**. The email address and password are defined during installation.
 
 ---
 
-# ⚙️ إعداد الاتصال بقاعدة البيانات
+## Database Setup
 
-في بيئة XAMPP المحلية، يعمل النظام افتراضيًا باستخدام إعدادات MySQL المعتادة:
+The project uses a base schema followed by incremental database migrations.
+
+### Base Schema
 
 ```text
+database/schema.sql
+```
+
+The base schema creates the primary database structure and the:
+
+```text
+pms_db
+```
+
+database.
+
+### Migration Order
+
+| Migration               | Purpose                                   |
+| ----------------------- | ----------------------------------------- |
+| `001_permissions.sql`   | Permissions and role-permission structure |
+| `002_notifications.sql` | Internal notifications structure          |
+
+The migration sequence should be preserved.
+
+---
+
+## Environment Configuration
+
+### Configuration Files
+
+```text
+.env.example
+.env
+config/env.php
+config/database.php
+```
+
+### `.env.example`
+
+Provides the configuration template for an environment.
+
+### `.env`
+
+Contains the actual environment-specific configuration and should **not** be committed to Git.
+
+### `config/env.php`
+
+Loads and manages environment configuration for the application.
+
+### `config/database.php`
+
+Reads the database configuration from the environment when `.env` is available. When it is not available, the project uses the default XAMPP database configuration.
+
+### Default XAMPP Configuration
+
+```env
 DB_HOST=localhost
 DB_NAME=pms_db
 DB_USER=root
 DB_PASS=
 ```
 
-لذلك لا تحتاج عادةً إلى تعديل أي ملفات إعدادات عند التشغيل المحلي.
+Using:
+
+```text
+DB_USER=root
+DB_PASS=
+```
+
+is suitable only for a local development environment where this is the configured XAMPP database setup. It should not be treated as a secure production database configuration.
+
+### Application Environment
+
+The project also supports:
+
+```env
+APP_ENV=local
+FORCE_HTTPS=0
+```
+
+For production-oriented deployment:
+
+```env
+APP_ENV=production
+FORCE_HTTPS=1
+```
+
+`APP_ENV=production` causes application errors to be logged to:
+
+```text
+storage/logs/error.log
+```
+
+while:
+
+```text
+APP_ENV=local
+```
+
+allows errors to be displayed during local development.
 
 ---
 
-## 🌍 إعداد بيئة الإنتاج
+## First-Time Setup
 
-عند نقل المشروع إلى استضافة حقيقية، استخدم ملف البيئة:
-
-```text
-.env
-```
-
-ابدأ بنسخ:
+A new installation should follow this sequence:
 
 ```text
-.env.example
+1. Copy the project into the XAMPP htdocs directory
+2. Start Apache and MySQL
+3. Open phpMyAdmin
+4. Execute database/schema.sql
+5. Execute 001_permissions.sql
+6. Execute 002_notifications.sql
+7. Configure .env when required
+8. Open /pms/install.php
+9. Create the Administrator account
+10. Open /pms/modules/auth/login.php
 ```
 
-إلى:
+### Installer Safety
 
-```text
-.env
-```
-
-ثم عدّل القيم المطلوبة وفق إعدادات الخادم.
-
-> **تنبيه أمني:** لا تقم برفع ملف `.env` إلى Git أو مشاركته علنًا.
-
-الميزة هنا أن إعدادات البيئة يمكن تغييرها دون الحاجة إلى تعديل كود التطبيق نفسه.
+After successful installation, it is preferable to **delete or rename `install.php`** to prevent unnecessary access to the installer.
 
 ---
 
-# 👤 إنشاء حساب Administrator
+## Existing Installation Upgrade
 
-بعد إنشاء قاعدة البيانات وتشغيل الـ Migrations، افتح:
+For an existing installation, **do not re-run `schema.sql`** when it has already been applied to the database.
 
-```text
-http://localhost/pms/install.php
-```
-
-أدخل:
-
-* الاسم
-* البريد الإلكتروني
-* كلمة المرور
-
-سيقوم المعالج بإنشاء:
-
-* حساب **Administrator**
-* مشروع تجريبي جاهز للاستخدام
-
-### بعد اكتمال التثبيت
-
-يُنصح بحذف أو إعادة تسمية:
+Instead:
 
 ```text
-install.php
+Existing database
+→ Run only the required new migrations
 ```
 
-يمنع النظام إعادة تنفيذ عملية التثبيت مرة أخرى تلقائيًا، ولكن إزالة الملف بعد الانتهاء منه تظل ممارسة أمنية أفضل.
+For example:
+
+```text
+database/migrations/001_permissions.sql
+database/migrations/002_notifications.sql
+```
+
+should be executed only when those migrations have not already been applied.
+
+This prevents unnecessary database recreation and reduces the risk of data loss or conflicts.
 
 ---
 
-# 🔐 تسجيل الدخول
+## Login
 
-بعد إنشاء حساب المدير، انتقل إلى:
+The login page is available at:
 
 ```text
 http://localhost/pms/modules/auth/login.php
 ```
 
-لا يوجد حساب Administrator افتراضي داخل المشروع.
+There is no predefined default account.
 
-> البريد الإلكتروني وكلمة المرور يتم تحديدهما أثناء عملية التثبيت، وذلك لتجنب تضمين بيانات دخول ثابتة داخل النظام.
+Administrator credentials are created during:
+
+```text
+http://localhost/pms/install.php
+```
 
 ---
 
-# 📂 هيكل المشروع
+## Project Structure
 
 ```text
 pms/
 ├── .env.example
-│   └── قالب متغيرات البيئة
-│
 ├── config/
 │   ├── env.php
-│   │   └── تحميل متغيرات البيئة بدون Composer
 │   ├── database.php
-│   │   └── اتصال PDO بقاعدة البيانات
 │   └── app.php
-│       └── Bootstrap التطبيق وإعداد الجلسات والأخطاء والصلاحيات
-│
 ├── includes/
 │   ├── repositories/
-│   │   └── طبقة Repository لعزل استعلامات SQL
 │   ├── helpers.php
-│   │   └── الدوال العامة
 │   └── auth.php
-│       └── المصادقة والتحقق من الصلاحيات
-│
 ├── modules/
 │   ├── auth/
-│   │   └── تسجيل الدخول والخروج
 │   ├── dashboard/
-│   │   └── لوحة التحكم الرئيسية
 │   ├── projects/
-│   │   └── إدارة المشاريع والمرفقات والحذف الناعم
 │   ├── tasks/
-│   │   └── إدارة المهام والتعليقات والتبعيات والمرفقات
 │   ├── team/
-│   │   └── إدارة أعضاء الفريق
 │   ├── reports/
-│   │   └── Gantt وBurndown وتقارير أداء الفريق
 │   ├── attachments/
-│   │   └── تنزيل المرفقات بشكل آمن
 │   ├── notifications/
-│   │   └── عرض وإدارة الإشعارات
 │   └── settings/
-│       └── إدارة الصلاحيات
-│
 ├── assets/
 │   └── css/
-│       └── style.css
-│
 ├── uploads/
-│   └── ملفات المرفقات مع حماية من تنفيذ PHP والفهرسة
-│
 ├── storage/
 │   ├── logs/
-│   │   └── سجلات أخطاء PHP
 │   └── backups/
-│       └── نسخ قاعدة البيانات الاحتياطية
-│
 ├── scripts/
 │   └── backup.sh
-│       └── سكربت النسخ الاحتياطي والتدوير التلقائي
-│
 ├── database/
 │   ├── schema.sql
-│   │   └── المخطط الأساسي لقاعدة البيانات
 │   └── migrations/
-│       ├── 001_permissions.sql
-│       └── 002_notifications.sql
-│
 └── install.php
-    └── معالج التثبيت الأولي
 ```
 
+### Directory Responsibilities
+
+| Path                     | Responsibility                                       |
+| ------------------------ | ---------------------------------------------------- |
+| `config/`                | Application, environment, and database configuration |
+| `includes/repositories/` | Repository classes responsible for data access       |
+| `includes/helpers.php`   | General reusable helper functions                    |
+| `includes/auth.php`      | Authentication and authorization support             |
+| `modules/auth/`          | Authentication functionality                         |
+| `modules/dashboard/`     | Dashboard                                            |
+| `modules/projects/`      | Project management                                   |
+| `modules/tasks/`         | Task management                                      |
+| `modules/team/`          | Team management                                      |
+| `modules/reports/`       | Reporting and analytics                              |
+| `modules/attachments/`   | Attachment handling                                  |
+| `modules/notifications/` | Internal notifications                               |
+| `modules/settings/`      | Application and permission settings                  |
+| `assets/css/`            | Stylesheets                                          |
+| `uploads/`               | Uploaded files                                       |
+| `storage/logs/`          | Application logs                                     |
+| `storage/backups/`       | Database backups                                     |
+| `scripts/backup.sh`      | Database backup script                               |
+| `database/`              | Schema and incremental migrations                    |
+| `install.php`            | Initial application installation                     |
+
 ---
 
-# ✨ الميزات المنجزة
+## Architecture
 
-## المرحلة 1 — الأساس
+The application follows a modular structure based on:
 
-تم تنفيذ المكونات الأساسية للنظام:
+**Thin Controllers + Repository Pattern**
 
-* المصادقة وتسجيل الدخول.
-* إدارة الأدوار:
-
-  * `admin`
-  * `manager`
-  * `member`
-* CRUD كامل للمشاريع.
-* CRUD كامل للمهام.
-* إدارة أعضاء الفريق.
-* لوحة التحكم.
-* سجل النشاطات.
-
----
-
-## المرحلة 2 — استكمال الوظائف الأساسية
-
-### 📎 المرفقات
-
-دعم رفع وتنزيل المرفقات على مستوى:
-
-* المشروع.
-* المهمة.
-
-مع تطبيق:
-
-* قائمة امتدادات مسموحة **Whitelist**.
-* حد أقصى للحجم: **15 MB**.
-* تخزين آمن يمنع تنفيذ ملفات PHP المرفوعة.
-
-### 🔗 تبعيات المهام
-
-دعم علاقات:
+### Request and Application Flow
 
 ```text
-Depends On
+User Request
+    ↓
+modules/*
+    ↓
+Application / Authentication Logic
+    ↓
+Repositories
+    ↓
+PDO
+    ↓
+MySQL / MariaDB
 ```
 
-مع إظهار تحذير مرئي عند وجود تبعية غير مكتملة.
+### Responsibilities
 
-### 🗑️ Soft Delete
+#### `modules/*`
 
-تم تطبيق الحذف الناعم على:
+Responsible for request flow, module-specific application behavior, and user-facing functionality.
 
-* المشاريع.
-* المهام.
-* أعضاء الفريق.
+#### `repositories/*`
 
-مع تطبيق ضوابط أمنية، منها:
+Responsible for database access and SQL operations.
 
-* عدم السماح بحذف آخر Administrator.
-* عدم السماح للمستخدم بحذف حسابه بنفسه.
+The Repository Pattern isolates SQL from the controllers and reduces direct database logic inside request-handling code.
 
-### 👤 My Tasks
+#### `helpers.php`
 
-صفحة مخصصة تعرض المهام المرتبطة بالمستخدم الحالي فقط.
+Contains reusable application-level helper functions.
 
-### ⏱️ الساعات الفعلية
+#### `auth.php`
 
-تم تفعيل الحقل:
+Handles authentication and authorization-related logic.
 
-```text
-actual_hours
-```
+#### `config/app.php`
 
-ضمن نموذج المهمة لتسجيل الساعات الفعلية.
+Acts as the application bootstrap/configuration entry point.
 
----
+### Implemented Repositories
 
-# 📊 المرحلة 3 — التقارير والتحليلات
-
-## Gantt Chart
-
-مخطط زمني للمهام يعرض التقدم والحالة، وتم تنفيذه بدون مكتبات خارجية.
-
-## Burndown Chart
-
-مخطط Burndown يتم توليده باستخدام SVG من PHP، ويقارن بين:
-
-* المتبقي الفعلي.
-* الوتيرة المثالية.
-
-## تقرير أداء الفريق
-
-يشمل مؤشرات مثل:
-
-* معدل الإنجاز.
-* المهام المتأخرة.
-* متوسط الساعات المقدرة.
-* متوسط الساعات الفعلية.
-
-## CSV Export
-
-يمكن تصدير تقرير أداء الفريق بصيغة:
-
-```text
-CSV
-```
-
-وفتح الملف مباشرة باستخدام Excel أو أي برنامج جداول بيانات.
-
-### ملاحظة حول PDF وExcel
-
-لم يتم تضمين التصدير الأصلي إلى PDF أو Excel عبر مكتبات خارجية مثل:
-
-* `TCPDF`
-* `PhpSpreadsheet`
-
-وذلك للحفاظ على المشروع خاليًا من التبعيات الخارجية.
-
-تم توفير **CSV** كبديل خفيف وعملي دون الحاجة إلى Composer.
-
----
-
-# 🧱 المرحلة 4 — Repository Pattern
-
-تمت إعادة هيكلة طبقة الوصول إلى البيانات وفصل استعلامات SQL عن صفحات التطبيق.
-
-تم إنشاء:
+The project includes:
 
 ```text
 ProjectRepository
@@ -434,366 +513,533 @@ TaskRepository
 UserRepository
 ActivityRepository
 AttachmentRepository
+PermissionRepository
+NotificationRepository
 ```
 
-وأصبحت ملفات `modules/*` أقرب إلى **Thin Controllers** تستدعي وظائف واضحة من الـ Repositories بدل كتابة SQL مباشرة.
-
-على سبيل المثال:
-
-```php
-$taskRepo->forProject($id);
-```
-
-كما أصبحت الوظائف التالية تعتمد على طبقة الـ Repository:
+Repository-based refactoring includes moving operations such as:
 
 ```text
 logActivity()
 attemptLogin()
 ```
 
-> هذه المرحلة إعادة هيكلة داخلية بالكامل، ولم تغيّر السلوك الوظيفي الظاهر للمستخدم.
+into their corresponding repository-based architecture without changing user-facing behavior.
 
 ---
 
-# 🔐 المرحلة 5 — نظام الصلاحيات التفصيلية
+## Feature Breakdown
 
-تم الانتقال من نظام أدوار ثابت إلى نظام صلاحيات مرن وقابل للتخصيص.
+### Authentication and Users
 
-## جداول الصلاحيات
+The application includes:
 
-تمت إضافة:
+* Authentication.
+* Administrator account creation during installation.
+* `admin`, `manager`, and `member` roles.
+* Permission-aware actions.
+
+### Projects
+
+Project management includes CRUD operations and project-related workflows.
+
+### Tasks
+
+Task management includes:
+
+* CRUD operations.
+* Task assignment.
+* Task dependencies.
+* Soft Delete.
+* `actual_hours`.
+* My Tasks functionality.
+
+### Attachments
+
+Attachment handling includes:
+
+* Whitelisted file extensions.
+* Maximum file size of **15 MB**.
+* Protection against PHP execution.
+
+### Activity Log
+
+The application records activity through the activity logging functionality.
+
+### Dashboard
+
+The dashboard provides an application overview for project and task management.
+
+---
+
+## Roles and Permissions
+
+The permission model consists of:
 
 ```text
 permissions
 role_permissions
-```
-
-حيث يمثل:
-
-* `permissions` كتالوج الصلاحيات.
-* `role_permissions` مصفوفة الصلاحيات المرتبطة بكل دور.
-
-## PermissionRepository
-
-تمت إضافة:
-
-```text
 PermissionRepository
 ```
 
-مع Cache على مستوى الطلب الواحد لتحسين الأداء وتقليل الاستعلامات المتكررة.
-
-## دوال التحقق من الصلاحيات
-
-تمت إضافة:
+Permission checks are exposed through:
 
 ```php
-userCan('key');
-requirePermission('key');
+userCan('key')
+requirePermission('key')
 ```
 
-ضمن:
+### Role Behavior
 
-```text
-includes/auth.php
-```
+| Role          | Permission Model               |
+| ------------- | ------------------------------ |
+| Administrator | Full permissions automatically |
+| Manager       | Permissions can be customized  |
+| Member        | Permissions can be customized  |
 
-## Administrator
+### Permission Management
 
-يمتلك Administrator جميع الصلاحيات تلقائيًا وفق آلية **Fail-Safe**.
-
-أما `Manager` و`Member` فيمكن تخصيص صلاحياتهما.
-
-## إدارة الصلاحيات من الواجهة
-
-تتوفر لوحة الإدارة في:
+Permission administration is available through:
 
 ```text
 modules/settings/permissions.php
 ```
 
-ولا تظهر إلا للمستخدم الذي يمتلك الصلاحية:
+The interface also hides actions and controls that the current user is not permitted to perform.
+
+A specific implemented permission includes:
 
 ```text
 settings.manage
 ```
 
-يمكن من خلالها تفعيل أو تعطيل الصلاحيات باستخدام واجهة Checkboxes دون تعديل الكود.
+### Administrator Fail-Safe
 
-كما يتم إخفاء أزرار الإجراءات مثل الإضافة والحذف تلقائيًا وفق صلاحيات المستخدم الحالي.
+Administrators automatically retain full access to the system's permissions.
 
-> تم ضبط القيم الافتراضية لتتطابق مع سلوك النظام السابق القائم على الأدوار، لذلك لا يحدث تغيير للمستخدمين الحاليين إلا عند تعديل مصفوفة الصلاحيات يدويًا.
-
----
-
-# 🔔 المرحلة 6 — الإشعارات الداخلية
-
-تم تنفيذ نظام إشعارات داخلي متكامل.
-
-## جدول Notifications
-
-يتضمن بيانات مثل:
-
-* المستلم.
-* المُرسل.
-* النوع.
-* الرسالة.
-* الرابط.
-* حالة القراءة.
-
-## NotificationRepository
-
-يدعم:
-
-* إنشاء الإشعارات.
-* عدّ الإشعارات غير المقروءة.
-* عرض الإشعارات.
-* تحديد إشعار كمقروء.
-* تحديد جميع الإشعارات كمقروءة.
-
-## 🔔 شريط الإشعارات
-
-تمت إضافة جرس إشعارات في الشريط العلوي مع عداد للإشعارات غير المقروءة، ويظهر عبر صفحات النظام.
-
-## صفحة الإشعارات
-
-```text
-modules/notifications/index.php
-```
-
-وتوفر:
-
-* عرض جميع الإشعارات.
-* تحديد جميع الإشعارات كمقروءة.
-
-## الإشعارات التلقائية
-
-يتم إنشاء إشعار تلقائي عند:
-
-* إسناد مهمة إلى عضو.
-* إعادة إسناد المهمة إلى عضو مختلف.
-* إضافة تعليق على مهمة بواسطة شخص غير العضو المعيّن لها.
-
-### قيد حالي
-
-لم يتم بعد تنفيذ تنبيهات اقتراب موعد الاستحقاق.
-
-هذه الميزة تحتاج إلى **Cron Job** لفحص المهام بشكل دوري، بينما البنية الأساسية لجدول `notifications` جاهزة لدعمها مستقبلًا.
+The system also prevents deletion of the last Administrator account.
 
 ---
 
-# 🚀 المرحلة 7 — الجاهزية للإنتاج
+## Notifications
 
-تم تجهيز النظام للانتقال من بيئة التطوير المحلية إلى بيئة استضافة حقيقية.
-
-## Environment Configuration
-
-تمت إضافة:
+The project includes an internal notification system based on:
 
 ```text
-.env.example
-config/env.php
+notifications
+NotificationRepository
 ```
 
-مع دعم تحميل متغيرات البيئة دون Composer.
+Implemented functionality includes:
 
-## إعداد قاعدة البيانات
+* Unread notification counter.
+* Notification center/page.
+* Notification when a task is assigned or reassigned.
+* Notification when someone other than the assigned person adds a comment.
 
-يقرأ:
+### Deadline Reminders
 
-```text
-DB_HOST
-DB_NAME
-DB_USER
-DB_PASS
-```
+Deadline reminder automation is **not currently implemented**.
 
-من `.env` عند توفره، ويعود تلقائيًا إلى إعدادات XAMPP الافتراضية عند عدم وجود الملف.
+It requires scheduled execution through **Cron**.
 
-## 🔒 أمان الجلسات
+---
 
-تم تشديد إعدادات الجلسات لتشمل:
+## Reports and Analytics
 
-```text
-HttpOnly
-SameSite=Lax
-Secure
-```
+The reporting module includes:
 
-ويتم تفعيل `Secure` تلقائيًا عند ضبط:
+### Gantt
 
-```text
-FORCE_HTTPS=1
-```
+Provides Gantt-based project/task visualization.
 
-## 📝 تسجيل الأخطاء
+### Burndown
 
-في بيئة الإنتاج:
+Provides Burndown reporting.
 
-```text
-APP_ENV=production
-```
+### Team Performance
 
-يتم تسجيل أخطاء PHP في:
+Provides team performance reporting.
 
-```text
-storage/logs/error.log
-```
+### CSV Export
 
-بدل عرض التفاصيل الفنية للزائر.
+The project supports CSV export without requiring additional Composer-based PDF/Excel libraries.
 
-أما في بيئة التطوير:
+### PDF and Excel
 
-```text
+Native PDF and Excel export are **not implemented**.
+
+Libraries such as TCPDF or PhpSpreadsheet would be required for those formats, but they are not currently part of the implemented project.
+
+---
+
+## Development Milestones
+
+All seven planned development phases have been completed.
+
+### Phase 1 — Foundation
+
+Implemented:
+
+* Authentication.
+* `admin` / `manager` / `member`.
+* Project CRUD.
+* Task CRUD.
+* Team CRUD.
+* Dashboard.
+* Activity Log.
+
+### Phase 2 — Functional Completion
+
+Implemented:
+
+* Attachments.
+* Whitelisted extensions.
+* Maximum upload size of 15 MB.
+* Protection against PHP execution.
+* Task Dependencies.
+* Soft Delete.
+* Prevention of deleting the last Administrator.
+* Prevention of self-deletion.
+* My Tasks.
+* `actual_hours`.
+
+### Phase 3 — Reports & Analytics
+
+Implemented:
+
+* Gantt.
+* Burndown.
+* Team Performance.
+* CSV Export.
+
+Native PDF/Excel export remains outside the implemented scope and would require external libraries.
+
+### Phase 4 — Repository Refactoring
+
+Implemented:
+
+* Repository Pattern.
+* `ProjectRepository`.
+* `TaskRepository`.
+* `UserRepository`.
+* `ActivityRepository`.
+* `AttachmentRepository`.
+* Thin Controllers.
+* Repository-based handling for `logActivity()` and `attemptLogin()`.
+
+The refactoring isolates SQL access without changing user-facing behavior.
+
+### Phase 5 — Granular Permissions
+
+Implemented:
+
+* `permissions`.
+* `role_permissions`.
+* `PermissionRepository`.
+* `userCan()`.
+* `requirePermission()`.
+* Administrator full-access fail-safe.
+* Configurable Manager permissions.
+* Configurable Member permissions.
+* `settings.manage`.
+* Permission administration at `modules/settings/permissions.php`.
+* Permission-aware UI actions.
+
+### Phase 6 — Internal Notifications
+
+Implemented:
+
+* Notification schema.
+* `NotificationRepository`.
+* Unread counter.
+* Notification center.
+* Assignment/reassignment notifications.
+* Comment notifications when comments are added by someone other than the assigned user.
+
+Deadline reminders are not implemented and require Cron-based automation.
+
+### Phase 7 — Production Readiness
+
+Implemented:
+
+* `.env.example`.
+* Environment loading through `config/env.php`.
+* Database configuration through environment variables.
+* `HttpOnly` session cookies.
+* `SameSite=Lax`.
+* `Secure` cookies when `FORCE_HTTPS=1`.
+* Production error logging.
+* Development error display.
+* `storage/` protection through `.htaccess`.
+* Database backup using `mysqldump` + `gzip`.
+* Retention of the latest 14 backups.
+* Backup preparation for Cron scheduling.
+* Git exclusions for `.env`, uploads, logs, and backups.
+
+---
+
+## Production Readiness
+
+The project includes a production-oriented foundation covering environment configuration, session hardening, error logging, storage protection, and database backup.
+
+Production deployment should use environment-specific credentials rather than the default local XAMPP configuration.
+
+### Environment Separation
+
+Local development:
+
+```env
 APP_ENV=local
 ```
 
-فتظل الأخطاء ظاهرة لتسهيل التطوير والتصحيح.
+Production-oriented configuration:
 
-## 🛡️ حماية Storage
-
-تمت حماية:
-
-```text
-storage/
+```env
+APP_ENV=production
 ```
 
-من الوصول المباشر عبر المتصفح باستخدام `.htaccess`.
+The application changes its error-handling behavior according to the environment.
 
-## 💾 النسخ الاحتياطي
+### HTTPS
 
-يوفر:
+Set:
+
+```env
+FORCE_HTTPS=1
+```
+
+when HTTPS is enabled and the deployment requires secure cookies.
+
+When enabled, the session cookie uses the `Secure` attribute.
+
+---
+
+## Database Backup
+
+Database backups are handled by:
 
 ```text
 scripts/backup.sh
 ```
 
-نسخًا احتياطية تلقائية لقاعدة البيانات باستخدام:
+The script uses:
 
 ```text
 mysqldump
+gzip
 ```
 
-مع:
+to generate compressed database backups.
 
-* ضغط `gzip`.
-* تدوير تلقائي للنسخ.
-* الاحتفاظ بآخر **14 نسخة** فقط.
-* جاهزية للجدولة باستخدام `cron`.
+Backups are stored under:
 
-توجد تعليمات الجدولة داخل السكربت نفسه.
+```text
+storage/backups/
+```
 
-## 🚫 حماية الملفات الحساسة في Git
+The system retains the latest:
 
-يستثني `.gitignore` الملفات والبيانات الحساسة أو المؤقتة، مثل:
+```text
+14
+```
+
+backup copies.
+
+The backup script is prepared for scheduling through **Cron**. The scheduling instructions are provided within the script itself.
+
+---
+
+## Security Notes
+
+The project includes several application-level security measures.
+
+### Session Security
+
+Session cookies use:
+
+```text
+HttpOnly
+SameSite=Lax
+```
+
+The:
+
+```text
+Secure
+```
+
+attribute is enabled when:
+
+```env
+FORCE_HTTPS=1
+```
+
+### Upload Security
+
+Uploaded files are restricted through:
+
+* Whitelisted extensions.
+* Maximum size of 15 MB.
+* Protection against PHP execution.
+
+### Storage Protection
+
+The:
+
+```text
+storage/
+```
+
+directory is protected through `.htaccess` to prevent direct access.
+
+### Environment Protection
+
+The actual environment file:
+
+```text
+.env
+```
+
+must not be committed to Git.
+
+The `.gitignore` configuration also excludes:
 
 ```text
 .env
 uploads/
-storage/logs/
-storage/backups/
+logs/
+backups/
 ```
+
+### Account Safety
+
+The application prevents:
+
+* Deletion of the last Administrator.
+* Users deleting themselves.
 
 ---
 
-# 🔑 بيانات الدخول الافتراضية
+## Project Status
 
-لا يوجد حساب افتراضي مُسبق.
+### Current Status
 
-يتم إنشاء حساب Administrator أثناء تشغيل:
+**All seven planned phases are complete.**
+
+The system is ready for **full internal operation**.
+
+### Implemented
+
+* Authentication.
+* Roles and permissions.
+* Project/task/team management.
+* Dashboard.
+* Activity logging.
+* Attachments.
+* Task dependencies.
+* Soft Delete.
+* My Tasks.
+* `actual_hours`.
+* Gantt.
+* Burndown.
+* Team Performance.
+* CSV Export.
+* Repository Pattern.
+* Granular permissions.
+* Internal notifications.
+* Session hardening.
+* Environment-based configuration.
+* Error logging.
+* Storage protection.
+* Database backup and retention.
+
+### Not Yet Implemented
+
+* Native PDF export.
+* Native Excel export.
+* Deadline reminder automation.
+* Email notifications.
+* Mobile application.
+
+---
+
+## Future Enhancements
+
+The following items are optional extensions and are **not part of the original seven-phase roadmap**:
+
+* Email notifications.
+* Native PDF export.
+* Mobile app.
+* Deadline reminders.
+
+These should be treated as future extensions rather than incomplete phases of the current implementation.
+
+---
+
+## Operational Notes
+
+### Installer
+
+Use:
+
+```text
+http://localhost/pms/install.php
+```
+
+only during initial setup.
+
+After installation, delete or rename:
 
 ```text
 install.php
 ```
 
-وتقوم أنت بتحديد:
+when appropriate.
+
+### Login
+
+Use:
 
 ```text
-Name
-Email
-Password
+http://localhost/pms/modules/auth/login.php
 ```
 
-هذه الآلية أفضل أمنيًا من تضمين بيانات دخول ثابتة داخل المشروع.
+### Local Database Defaults
+
+```env
+DB_HOST=localhost
+DB_NAME=pms_db
+DB_USER=root
+DB_PASS=
+```
+
+These values represent the default XAMPP local configuration and should be changed for real hosting environments.
+
+### Database Migration Rule
+
+Never re-run:
+
+```text
+database/schema.sql
+```
+
+against an already initialized installation unless a full database recreation is intentionally required.
+
+For upgrades, apply only the migrations that have not yet been executed.
+
+### Backup Storage
+
+Keep generated backups under:
+
+```text
+storage/backups/
+```
+
+and ensure that this directory remains excluded from version control.
 
 ---
 
-# ✅ حالة المشروع
+## License
 
-## اكتمال خارطة الطريق
-
-**المراحل السبع مكتملة ✅**
-
-النظام حاليًا في حالة:
-
-> **جاهز للتشغيل الداخلي الكامل**
-
-وتشمل النسخة الحالية:
-
-* إدارة المشاريع.
-* إدارة المهام.
-* إدارة أعضاء الفريق.
-* المصادقة والأدوار.
-* نظام الصلاحيات التفصيلية.
-* المرفقات الآمنة.
-* تبعيات المهام.
-* Soft Delete.
-* My Tasks.
-* سجل النشاطات.
-* Gantt Chart.
-* Burndown Chart.
-* تقارير أداء الفريق.
-* CSV Export.
-* Repository Pattern.
-* الإشعارات الداخلية.
-* إعدادات `.env`.
-* تحسينات أمان الجلسات.
-* تسجيل أخطاء الإنتاج.
-* حماية Storage.
-* النسخ الاحتياطي التلقائي.
-
----
-
-# 🔮 التطويرات المستقبلية الاختيارية
-
-أي تطوير بعد اكتمال المراحل السبع يُعد **توسعة اختيارية** فوق النظام الحالي، وليس جزءًا من خارطة الطريق الأصلية.
-
-من أمثلة التوسعات المستقبلية:
-
-* 📧 التكامل مع البريد الإلكتروني لإرسال الإشعارات.
-* 📄 دعم تصدير PDF الحقيقي.
-* 📊 تصدير Excel باستخدام `PhpSpreadsheet`.
-* ⏰ تنبيهات تلقائية قبل مواعيد الاستحقاق.
-* 📱 تطبيق للهواتف المحمولة.
-* 🔌 تكاملات مع خدمات وأنظمة خارجية.
-
----
-
-# 🔒 ملاحظات أمنية وتشغيلية
-
-قبل استخدام النظام في بيئة إنتاج فعلية، يُوصى بما يلي:
-
-1. إنشاء `.env` مخصص للخادم.
-2. استخدام كلمة مرور قوية لقاعدة البيانات.
-3. تفعيل HTTPS.
-4. التأكد من عدم رفع `.env` إلى Git.
-5. حذف أو إعادة تسمية `install.php`.
-6. التأكد من حماية `storage/` و`uploads/`.
-7. تفعيل النسخ الاحتياطي المجدول.
-8. مراجعة صلاحيات المستخدمين قبل بدء التشغيل الفعلي.
-
----
-
-# 📄 الترخيص
-
-لم يتم تضمين معلومات ترخيص في المحتوى الحالي للمشروع. يُنصح بإضافة ملف `LICENSE` وتحديد الترخيص المناسب قبل نشر المستودع بشكل عام.
-
----
-
-## 💡 الخلاصة
-
-**PMS** هو نظام إدارة مشاريع مبني على PHP وMySQL، بدأ كبنية أساسية لإدارة المشاريع والمهام، ثم تطور تدريجيًا ليشمل:
-
-**إدارة المشاريع → إدارة المهام → التقارير → Repository Pattern → الصلاحيات التفصيلية → الإشعارات → الجاهزية للإنتاج**
-
-وباكتمال المراحل السبع، أصبح المشروع **جاهزًا للتشغيل الداخلي الكامل** وقابلًا للتوسع مستقبلًا بإضافة خدمات وتكاملات جديدة دون الحاجة إلى إعادة بناء الأساس البرمجي.
+License information is not currently specified.
