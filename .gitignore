@@ -1,0 +1,23 @@
+# البيئة والمفاتيح السرية
+.env
+
+# ملفات الرفع مع الاحتفاظ بملفات الحماية
+uploads/*
+!uploads/.htaccess
+!uploads/.gitkeep
+
+# السجلات والنسخ الاحتياطية
+storage/logs/*
+!storage/logs/.gitkeep
+storage/backups/*
+
+# 🔥 الأهم: حزم Composer (يجب تجاهلها)
+/vendor/
+
+# ملفات نظام التشغيل
+.DS_Store
+Thumbs.db
+
+# مجلدات البرمجة (IDE)
+.idea/
+.vscode/
